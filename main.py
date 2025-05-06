@@ -190,7 +190,7 @@ ttk.Entry(frm, textvariable=cust_search).pack(side="left", padx=5)
 ttk.Button(frm, text="Search", command=lambda: refresh_customers(cust_search.get())).pack(side="left")
 ttk.Button(frm, text="Show All", command=lambda: refresh_customers("")).pack(side="left")
 
-cols = ("CustomerID","Name","IncomeProof")
+cols = ("CustomerID","Name","Phone", "Email", "SSN")
 cust_tree = ttk.Treeview(tab1, columns=cols, show="headings", height=6)
 for c in cols:
     cust_tree.heading(c, text=c)
@@ -217,17 +217,26 @@ ttk.Entry(frm2, textvariable=loan_search).pack(side="left", padx=5)
 ttk.Button(frm2, text="Search", command=lambda: refresh_loans(loan_search.get())).pack(side="left")
 ttk.Button(frm2, text="Show All", command=lambda: refresh_loans("")).pack(side="left")
 
-cols2 = ("LoanID","Amount","InterestRate","LoanType","CustomerID")
+cols2 = ("LoanID","CustomerID","TypeID","Amount","Interest Rate", "Start Date", "End Date", "Status", "Date Approved", "Approved By","Amount Paid","Number Of Payments")
 loan_tree = ttk.Treeview(tab2, columns=cols2, show="headings", height=6)
 for c in cols2:
     loan_tree.heading(c, text=c)
 loan_tree.pack(fill="x", padx=5, pady=5)
 
 form2 = ttk.Frame(tab2); form2.pack(fill="x", pady=5)
-ttk.Label(form2,text="Amount:").grid(row=0,column=0);      ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
-ttk.Label(form2,text="Rate %:").grid(row=1,column=0);     ttk.Entry(form2,textvariable=loan_rate).grid(row=1,column=1)
-ttk.Label(form2,text="Type:").grid(row=2,column=0);       ttk.Entry(form2,textvariable=loan_type).grid(row=2,column=1)
-ttk.Label(form2,text="Cust ID:").grid(row=3,column=0);    ttk.Entry(form2,textvariable=loan_cust_id).grid(row=3,column=1)
+ttk.Label(form2,text="LoanID:").grid(row=0,column=0);      ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
+ttk.Label(form2,text="CustomerID:").grid(row=1,column=0);     ttk.Entry(form2,textvariable=loan_rate).grid(row=1,column=1)
+ttk.Label(form2,text="TypeID:").grid(row=2,column=0);       ttk.Entry(form2,textvariable=loan_type).grid(row=2,column=1)
+ttk.Label(form2,text="Amount:").grid(row=3,column=0);    ttk.Entry(form2,textvariable=loan_cust_id).grid(row=3,column=1)
+ttk.Label(form2,text="Interest:").grid(row=0,column=0);      ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
+ttk.Label(form2,text="Start Date:").grid(row=1,column=0);     ttk.Entry(form2,textvariable=loan_rate).grid(row=1,column=1)
+ttk.Label(form2,text="End Date:").grid(row=2,column=0);       ttk.Entry(form2,textvariable=loan_type).grid(row=2,column=1)
+ttk.Label(form2,text="Status:").grid(row=3,column=0);    ttk.Entry(form2,textvariable=loan_cust_id).grid(row=3,column=1)
+ttk.Label(form2,text="Date Approved:").grid(row=1,column=0);     ttk.Entry(form2,textvariable=loan_rate).grid(row=1,column=1)
+ttk.Label(form2,text="Approved By:").grid(row=2,column=0);       ttk.Entry(form2,textvariable=loan_type).grid(row=2,column=1)
+ttk.Label(form2,text="Amount Paid:").grid(row=3,column=0);    ttk.Entry(form2,textvariable=loan_cust_id).grid(row=3,column=1)
+ttk.Label(form2,text="Number Of Payments:").grid(row=1,column=0);     ttk.Entry(form2,textvariable=loan_rate).grid(row=1,column=1)
+
 btns2 = ttk.Frame(tab2); btns2.pack(pady=5)
 ttk.Button(btns2, text="Add",    command=add_loan).grid(row=0,column=0,padx=3)
 ttk.Button(btns2, text="Update", command=update_loan).grid(row=0,column=1,padx=3)
@@ -235,20 +244,104 @@ ttk.Button(btns2, text="Delete", command=delete_loan).grid(row=0,column=2,padx=3
 
 refresh_loans()
 
-# -- Customer View Tab --
-tab3 = ttk.Frame(nb); nb.add(tab3, text="View Customer Loans")
-view_cust_id = tk.StringVar()
-frm3 = ttk.Frame(tab3); frm3.pack(fill="x", pady=5)
-ttk.Label(frm3, text="Customer ID:").pack(side="left", padx=5)
-ttk.Entry(frm3, textvariable=view_cust_id, width=10).pack(side="left")
-ttk.Button(frm3, text="View Loans", command=view_customer_loans).pack(side="left", padx=5)
+# -- Mortgage View Tab --
+tab3 = ttk.Frame(nb); nb.add(tab3, text="Mortgage")
+loan_amount, loan_rate, loan_type, loan_cust_id, loan_search = (
+    tk.StringVar(), tk.StringVar(), tk.StringVar(), tk.StringVar(), tk.StringVar()
+)
 
-cols3 = cols2
-view_tree = ttk.Treeview(tab3, columns=cols3, show="headings", height=8)
-for c in cols3:
-    view_tree.heading(c, text=c)
-view_tree.pack(fill="both", expand=True, padx=5, pady=5)
+frm2 = ttk.Frame(tab3); frm2.pack(fill="x", pady=2)
+ttk.Entry(frm2, textvariable=loan_search).pack(side="left", padx=5)
+ttk.Button(frm2, text="Search", command=lambda: refresh_loans(loan_search.get())).pack(side="left")
+ttk.Button(frm2, text="Show All", command=lambda: refresh_loans("")).pack(side="left")
+
+cols2 = ("LoanID","House Address","House Area","Bedrooms","House Price")
+loan_tree = ttk.Treeview(tab3, columns=cols2, show="headings", height=6)
+for c in cols2:
+    loan_tree.heading(c, text=c)
+loan_tree.pack(fill="x", padx=5, pady=5)
+
+form2 = ttk.Frame(tab3); form2.pack(fill="x", pady=5)
+ttk.Label(form2,text="LoanID:").grid(row=0,column=0);      ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
+ttk.Label(form2,text="House Address:").grid(row=1,column=0);     ttk.Entry(form2,textvariable=loan_rate).grid(row=1,column=1)
+ttk.Label(form2,text="House Area:").grid(row=2,column=0);       ttk.Entry(form2,textvariable=loan_type).grid(row=2,column=1)
+ttk.Label(form2,text="Bedrooms:").grid(row=3,column=0);    ttk.Entry(form2,textvariable=loan_cust_id).grid(row=3,column=1)
+ttk.Label(form2,text="House Price:").grid(row=0,column=0);      ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
+
+
+
+# -- Auto View Tab --
+tab4 = ttk.Frame(nb); nb.add(tab4, text="Auto")
+loan_amount, loan_rate, loan_type, loan_cust_id, loan_search = (
+    tk.StringVar(), tk.StringVar(), tk.StringVar(), tk.StringVar(), tk.StringVar()
+)
+
+frm2 = ttk.Frame(tab4); frm2.pack(fill="x", pady=2)
+ttk.Entry(frm2, textvariable=loan_search).pack(side="left", padx=5)
+ttk.Button(frm2, text="Search", command=lambda: refresh_loans(loan_search.get())).pack(side="left")
+ttk.Button(frm2, text="Show All", command=lambda: refresh_loans("")).pack(side="left")
+
+cols2 = ("LoanID","CustomerID","TypeID","Amount","Interest Rate", "Start Date", "End Date", "Status", "Date Approved", "Approved By","Amount Paid","Number Of Payments")
+loan_tree = ttk.Treeview(tab4, columns=cols2, show="headings", height=6)
+for c in cols2:
+    loan_tree.heading(c, text=c)
+loan_tree.pack(fill="x", padx=5, pady=5)
+
+form2 = ttk.Frame(tab4); form2.pack(fill="x", pady=5)
+ttk.Label(form2,text="LoanID:").grid(row=0,column=0);      ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
+ttk.Label(form2,text="Make:").grid(row=1,column=0);     ttk.Entry(form2,textvariable=loan_rate).grid(row=1,column=1)
+ttk.Label(form2,text="Model:").grid(row=2,column=0);       ttk.Entry(form2,textvariable=loan_type).grid(row=2,column=1)
+ttk.Label(form2,text="Year:").grid(row=3,column=0);    ttk.Entry(form2,textvariable=loan_cust_id).grid(row=3,column=1)
+ttk.Label(form2,text="VIN:").grid(row=0,column=0);      ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
+
+# -- Personal View Tab --
+tab5 = ttk.Frame(nb); nb.add(tab5, text="Personal")
+loan_amount, loan_rate, loan_type, loan_cust_id, loan_search = (
+    tk.StringVar(), tk.StringVar(), tk.StringVar(), tk.StringVar(), tk.StringVar()
+)
+
+frm2 = ttk.Frame(tab5); frm2.pack(fill="x", pady=2)
+ttk.Entry(frm2, textvariable=loan_search).pack(side="left", padx=5)
+ttk.Button(frm2, text="Search", command=lambda: refresh_loans(loan_search.get())).pack(side="left")
+ttk.Button(frm2, text="Show All", command=lambda: refresh_loans("")).pack(side="left")
+
+cols2 = ("LoanID","CustomerID","TypeID","Amount","Interest Rate", "Start Date", "End Date", "Status", "Date Approved", "Approved By","Amount Paid","Number Of Payments")
+loan_tree = ttk.Treeview(tab4, columns=cols2, show="headings", height=6)
+for c in cols2:
+    loan_tree.heading(c, text=c)
+loan_tree.pack(fill="x", padx=5, pady=5)
+
+form2 = ttk.Frame(tab5); form2.pack(fill="x", pady=5)
+ttk.Label(form2,text="LoanID:").grid(row=0,column=0);      ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
+ttk.Label(form2,text="Purpose:").grid(row=1,column=0);     ttk.Entry(form2,textvariable=loan_rate).grid(row=1,column=1)
+
+
+# -- Student View Tab --
+tab6 = ttk.Frame(nb); nb.add(tab6, text="Student")
+loan_amount, loan_rate, loan_type, loan_cust_id, loan_search = (
+    tk.StringVar(), tk.StringVar(), tk.StringVar(), tk.StringVar(), tk.StringVar()
+)
+
+frm2 = ttk.Frame(tab6); frm2.pack(fill="x", pady=2)
+ttk.Entry(frm2, textvariable=loan_search).pack(side="left", padx=5)
+ttk.Button(frm2, text="Search", command=lambda: refresh_loans(loan_search.get())).pack(side="left")
+ttk.Button(frm2, text="Show All", command=lambda: refresh_loans("")).pack(side="left")
+
+cols2 = ("LoanID","CustomerID","TypeID","Amount","Interest Rate", "Start Date", "End Date", "Status", "Date Approved", "Approved By","Amount Paid","Number Of Payments")
+loan_tree = ttk.Treeview(tab4, columns=cols2, show="headings", height=6)
+for c in cols2:
+    loan_tree.heading(c, text=c)
+loan_tree.pack(fill="x", padx=5, pady=5)
+
+form2 = ttk.Frame(tab6); form2.pack(fill="x", pady=5)
+ttk.Label(form2,text="LoanID:").grid(row=0,column=0);      ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
+ttk.Label(form2,text="Disbursement Date:").grid(row=1,column=0);     ttk.Entry(form2,textvariable=loan_rate).grid(row=1,column=1)
+ttk.Label(form2,text="Repayment Start:").grid(row=2,column=0);       ttk.Entry(form2,textvariable=loan_type).grid(row=2,column=1)
+ttk.Label(form2,text="Repayment End:").grid(row=3,column=0);    ttk.Entry(form2,textvariable=loan_cust_id).grid(row=3,column=1)
+ttk.Label(form2,text="Monthly:").grid(row=0,column=0);      ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
+ttk.Label(form2,text="Grace Period:").grid(row=1,column=0);     ttk.Entry(form2,textvariable=loan_rate).grid(row=1,column=1)
 
 # ----- STARTUP -----
+init_db()
 init_db()
 app.mainloop()
