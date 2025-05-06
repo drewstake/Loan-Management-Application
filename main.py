@@ -230,7 +230,7 @@ cols = ("CustomerID","Full Name","Phone")
 cust_tree = ttk.Treeview(tab1, columns=cols, show="headings", height=6)
 for c in cols: cust_tree.heading(c, text=c)
 cust_tree.pack(fill="x", padx=5, pady=5)
-cust_tree.bind("<<TreeviewSelect>>", on_customer_select)     # ← NEW
+cust_tree.bind("<<TreeviewSelect>>", on_customer_select)   
 
 form = ttk.Frame(tab1); form.pack(fill="x", pady=5)
 ttk.Label(form, text="Name:").grid(row=0,column=0)
@@ -259,7 +259,7 @@ cols2 = ("LoanID","Amount","InterestRate","LoanType","CustomerID")
 loan_tree = ttk.Treeview(tab2, columns=cols2, show="headings", height=6)
 for c in cols2: loan_tree.heading(c, text=c)
 loan_tree.pack(fill="x", padx=5, pady=5)
-loan_tree.bind("<<TreeviewSelect>>", on_loan_select)         # ← NEW
+loan_tree.bind("<<TreeviewSelect>>", on_loan_select)       
 
 form2 = ttk.Frame(tab2); form2.pack(fill="x", pady=5)
 ttk.Label(form2,text="Amount:").grid(row=0,column=0);   ttk.Entry(form2,textvariable=loan_amount).grid(row=0,column=1)
